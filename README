@@ -1,0 +1,5 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=2206
+
+this plugin improves vim runtime zip plugin, making it able to recursively read and write zip files : it allows editing zipfiles inside zipfiles inside zipfiles (on an arbitrary number of levels).
+
+Warning: this plugin needs python interface. it can be used only if vim is compiled with +python feature. To check this, type :version, and look for +python.
