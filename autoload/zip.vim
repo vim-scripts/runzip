@@ -1,12 +1,12 @@
 " zip.vim: Handles browsing zipfiles recursively (needs python)
 "            AUTOLOAD PORTION
-" Date:		Mar 29, 2008
-" Version:	1
+" Date:		Dec 23, 2009
+" Version:	1.1
 " Last Modification By:	Arno <arenevier@fdn.fr>
 " Original Author: That file is based on autoload/zip.vim from 
 "                  Charles E Campbell, Jr <NdrOchip@ScampbellPfamily.AbizM-NOSPAM>
 " License:	    Vim License  (see vim's :help license)
-" Copyright:    Copyright (C) 2008 Arno
+" Copyright:    Copyright (C) 2008-2009 Arno
 "               Permission is hereby granted to use and distribute this code,
 "               with or without modifications, provided that this copyright
 "               notice is copied with it. Like anything else that's free,
@@ -27,7 +27,7 @@ let g:loaded_zip     = "v1"
 let s:zipfile_escape = ' ?&;\|'
 
 python import sys, os, vim, re, tempfile
-python from zipfile import ZipFile
+python from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
 python from StringIO import StringIO
 
 " ZipBrowseSelect: {{{2
@@ -186,7 +186,10 @@ def pyZipUpdate(archive, filetorep, buffer):
             content = buffer.read()
         else:
             content = archive.read(name)
-        newarch.writestr(archive.getinfo(name), content)
+        zipinfo = archive.getinfo(name)
+        if zipinfo.compress_type not in [ZIP_STORED, ZIP_DEFLATED]:
+            archive_info.compress_type = ZIP_DEFLATED
+        newarch.writestr(zipinfo, content)
     newarch.close()
     str.seek(0)
     return str
